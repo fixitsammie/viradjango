@@ -17,3 +17,32 @@ class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
 
 
+from django.shortcuts import render
+import json
+
+from django.http import JsonResponse
+
+from .bittrex_data import data_load
+
+def spill_data(request):
+    response_data = {
+            "success": "true",
+            "message": "",
+            "result": [
+            {
+            "y": 2,
+            "x": 3,
+            },
+            {
+            "x": 3,
+            "y": 5,
+            },
+            {
+            "x": 5,
+            "y": 7,
+            }]}
+    response_data['message'] = 'Some error message'
+    response_data=data_load
+    
+    return JsonResponse(response_data)
+        

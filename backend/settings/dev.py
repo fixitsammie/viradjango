@@ -25,7 +25,7 @@ SECRET_KEY = 'verybadsecret!!!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -128,7 +128,8 @@ MIDDLEWARE_CLASSES = (
 
 STATIC_URL = '/static/'
 # Place static in the same location as webpack build files
-STATIC_ROOT = os.path.join(BASE_DIR, 'dist', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'dist')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'dist', 'static')
 STATICFILES_DIRS = []
 
 
