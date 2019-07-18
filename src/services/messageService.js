@@ -12,5 +12,9 @@ export default {
   deleteMessage(msgId) {
     return api.delete(`messages/${msgId}`)
               .then(response => response.data)
+  },
+  getBTC(){
+    return api.get(`bittrex/`)
+            .then(response=>response.data)
   }
 }

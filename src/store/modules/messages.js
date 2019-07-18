@@ -1,13 +1,19 @@
 import messageService from '../../services/messageService'
 
 const state = {
-  messages: []
+  messages: [],
+  bitcoin:[]
 }
 
 const getters = {
+  bitcoin: state => {
+    return state.bitcoin
+  },
   messages: state => {
     return state.messages
   }
+   
+
 }
 
 const actions = {
@@ -15,6 +21,13 @@ const actions = {
     messageService.fetchMessages()
     .then(messages => {
       commit('setMessages', messages)
+    })
+  },
+  getbitcoin ({ commit }) {
+    
+    messageService.getBTC()
+    .then(bitcoin => {
+      commit('setBitcoin', bitcoin)
     })
   },
   addMessage({ commit }, message) {
@@ -32,6 +45,9 @@ const actions = {
 const mutations = {
   setMessages (state, messages) {
     state.messages = messages
+  },
+  setBitcoin (state, bitcoin) {
+    state.bitcoin = bitcoin
   },
   addMessage(state, message) {
     state.messages.push(message)

@@ -38,14 +38,16 @@ export default {
     };
   },
   computed: mapState({
-    messages: state => state.messages.messages
+    messages: state => state.messages.messages,
+    bitcoin: state => state.messages.bitcoin
   }),
   methods: mapActions('messages', [
     'addMessage',
     'deleteMessage'
   ]),
   created() {
-    this.$store.dispatch('messages/getMessages')
+    this.$store.dispatch('messages/getMessages');
+    this.$store.dispatch('messages/getbitcoin');
   }
 };
 </script>
