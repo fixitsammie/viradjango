@@ -17,7 +17,7 @@ from .api.views import index_view, MessageViewSet,spill_data,udf_config,symbol_r
 import django_registration
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
-
+# path('accounts/', include('password_reset.urls')),
 urlpatterns = [
 
     # http://localhost:8000/
@@ -27,7 +27,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
 
     path('accounts/', include('django_registration.backends.one_step.urls')),
- path('accounts/', include('password_reset.urls')),
+
     path('accounts/', include('django.contrib.auth.urls')),
 
     #spill_data
