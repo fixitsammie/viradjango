@@ -12,8 +12,8 @@
 # below:
 .git
 .gitignore
-#Pipfile
-#Pipfile.lock
+Pipfile
+Pipfile.lock
 vue.config.js
 yarn.lock
 package.json
