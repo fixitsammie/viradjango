@@ -193,12 +193,14 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Insert Whitenoise Middleware at top but below Security Middleware
 # MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware',)
 # http://whitenoise.evans.io/en/stable/django.html#make-sure-staticfiles-is-configured-correctly
+"""
 from google.cloud import logging
 # StackDriver setup
 client = logging.Client()
 # Connects the logger to the root logging handler; by default
 # this captures all logs at INFO level and higher
-client.setup_logging()LOGGING = {
+client.setup_logging()
+LOGGING = {
 'handlers': {
 'stackdriver': {
 'class': 'google.cloud.logging.handlers.CloudLoggingHandler',
@@ -213,3 +215,4 @@ client.setup_logging()LOGGING = {
 },
 }
 
+"""
