@@ -12,11 +12,13 @@
 # below:
 .git
 .gitignore
-#Pipfile
-#Pipfile.lock
-
+Pipfile
+Pipfile.lock
+vue.config.js
+yarn.lock
 package.json
 package-lock.json
+
 # Python pycache:
 __pycache__/
 # Ignored by the build system
