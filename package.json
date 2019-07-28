@@ -12,15 +12,12 @@
     "js-cookie": "^2.2.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
-     "vue": "~2.5.17",
-    "vuejs": "^3.0.1"
+    "vue": "~2.5.17"
   },
   "devDependencies": {
-     "@vue/cli-plugin-babel": "3.0.4",
+    "@vue/cli-plugin-babel": "3.0.4",
     "@vue/cli-plugin-eslint": "3.0.4",
     "@vue/cli-service": "3.0.4",
-    
-    
     "babel-core": "6.26.3",
     "babel-loader": "7.1.5",
     "node-sass": "~4.9.4",
@@ -28,7 +25,6 @@
     "style-loader": "~0.23.1",
     "vue-template-compiler": "~2.5.17"
   },
- 
   "eslintConfig": {
     "root": true,
     "env": {

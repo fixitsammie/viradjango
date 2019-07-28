@@ -1,9 +1,8 @@
 <template>
   <div>
 <div class="TVChartContainer" :id="containerId" />
-<p @click="google">GOOG</p>
-<p @click="apple">AAPL</p>
-<p @click="microsoft">MSFT</p>
+
+
 </div>
 </template>
 
@@ -21,7 +20,7 @@ export default {
   name: 'TVChartContainer',
   props: {
     symbol: {
-      default: 'AAPL',
+      default: 'USDT-BTC:BITTREX',
       type: String,
     },
     interval: {
@@ -33,11 +32,11 @@ export default {
       type: String,
     },
     datafeedUrl: {
-      default: 'https://demo_feed.tradingview.com',
+      default: '/api',
       type: String,
     },
     libraryPath: {
-      default: '/charting_library/',
+      default: '/static/charting_library/',
       type: String,
     },
     chartsStorageUrl: {
@@ -68,7 +67,7 @@ export default {
       type: Object,
        "volume.volume.color.0": "#fe4761",
                         "volume.volume.color.1": "#3fcfb4",
-                        "volume.volume.transparency": 75,
+                        "volume.volume.transparency": 10,
     }
   },
   methods:{
@@ -104,7 +103,9 @@ export default {
       interval: this.interval,
       container_id: this.containerId,
       library_path: this.libraryPath,
-
+      toolbar_bg: '#f4f7f9',
+    allow_symbol_change: true,
+    theme:"Light",
       locale: getLanguageFromURL() || 'en',
       disabled_features: ["header_symbol_search",
                         "header_interval_dialog_button",
@@ -143,100 +144,8 @@ export default {
       fullscreen: this.fullscreen,
       width:'600',
       height:'400',
-      autosize: this.autosize,
-      studies_overrides: this.studiesOverrides,
-       overrides: {
-                        "symbolWatermarkProperties.color": "rgba(0,0,0, 0)",
-                        "paneProperties.background": "#20334d",
-                        "paneProperties.vertGridProperties.color": "#344568",
-                        "paneProperties.horzGridProperties.color": "#344568",
-                        "paneProperties.crossHairProperties.color": "#58637a",
-                        "paneProperties.crossHairProperties.style": 2,
-                        "mainSeriesProperties.style": 9,
-                        "mainSeriesProperties.showCountdown": false,
-                        "scalesProperties.showSeriesLastValue": true,
-                        "mainSeriesProperties.visible": false,
-                        "mainSeriesProperties.showPriceLine": false,
-                        "mainSeriesProperties.priceLineWidth": 1,
-                        "mainSeriesProperties.lockScale": false,
-                        "mainSeriesProperties.minTick": "default",
-                        "mainSeriesProperties.extendedHours": false,
-                        "volumePaneSize": "tiny",
-                        editorFontsList: ["Lato", "Arial", "Verdana", "Courier New", "Times New Roman"],
-                        "paneProperties.topMargin": 5,
-                        "paneProperties.bottomMargin": 5,
-                        "paneProperties.leftAxisProperties.autoScale": true,
-                        "paneProperties.leftAxisProperties.autoScaleDisabled": false,
-                        "paneProperties.leftAxisProperties.percentage": false,
-                        "paneProperties.leftAxisProperties.percentageDisabled": false,
-                        "paneProperties.leftAxisProperties.log": false,
-                        "paneProperties.leftAxisProperties.logDisabled": false,
-                        "paneProperties.leftAxisProperties.alignLabels": true,
-                        // "paneProperties.legendProperties.showStudyArguments": true,
-                        "paneProperties.legendProperties.showStudyTitles": true,
-                        "paneProperties.legendProperties.showStudyValues": true,
-                        "paneProperties.legendProperties.showSeriesTitle": true,
-                        "paneProperties.legendProperties.showSeriesOHLC": true,
-                        "scalesProperties.showLeftScale": false,
-                        "scalesProperties.showRightScale": true,
-                        "scalesProperties.backgroundColor": "#20334d",
-                        "scalesProperties.lineColor": "#46587b",
-                        "scalesProperties.textColor": "#8f98ad",
-                        "scalesProperties.scaleSeriesOnly": false,
-                        "mainSeriesProperties.priceAxisProperties.autoScale": true,
-                        "mainSeriesProperties.priceAxisProperties.autoScaleDisabled": false,
-                        "mainSeriesProperties.priceAxisProperties.percentage": false,
-                        "mainSeriesProperties.priceAxisProperties.percentageDisabled": false,
-                        "mainSeriesProperties.priceAxisProperties.log": false,
-                        "mainSeriesProperties.priceAxisProperties.logDisabled": false,
-                        "mainSeriesProperties.candleStyle.upColor": "#3fcfb4",
-                        "mainSeriesProperties.candleStyle.downColor": "#fe4761",
-                        "mainSeriesProperties.candleStyle.drawWick": true,
-                        "mainSeriesProperties.candleStyle.drawBorder": true,
-                        "mainSeriesProperties.candleStyle.borderColor": "#3fcfb4",
-                        "mainSeriesProperties.candleStyle.borderUpColor": "#3fcfb4",
-                        "mainSeriesProperties.candleStyle.borderDownColor": "#fe4761",
-                        "mainSeriesProperties.candleStyle.wickColor": "#737375",
-                        "mainSeriesProperties.candleStyle.wickUpColor": "#3fcfb4",
-                        "mainSeriesProperties.candleStyle.wickDownColor": "#fe4761",
-                        "mainSeriesProperties.candleStyle.barColorsOnPrevClose": false,
-                        "mainSeriesProperties.hollowCandleStyle.upColor": "#3fcfb4",
-                        "mainSeriesProperties.hollowCandleStyle.downColor": "#fe4761",
-                        "mainSeriesProperties.hollowCandleStyle.drawWick": true,
-                        "mainSeriesProperties.hollowCandleStyle.drawBorder": true,
-                        "mainSeriesProperties.hollowCandleStyle.borderColor": "#3fcfb4",
-                        "mainSeriesProperties.hollowCandleStyle.borderUpColor": "#3fcfb4",
-                        "mainSeriesProperties.hollowCandleStyle.borderDownColor": "#fe4761",
-                        "mainSeriesProperties.hollowCandleStyle.wickColor": "#737375",
-                        "mainSeriesProperties.hollowCandleStyle.wickUpColor": "#3fcfb4",
-                        "mainSeriesProperties.hollowCandleStyle.wickDownColor": "#fe4761",
-                        "mainSeriesProperties.haStyle.upColor": "#3fcfb4",
-                        "mainSeriesProperties.haStyle.downColor": "#fe4761",
-                        "mainSeriesProperties.haStyle.drawWick": true,
-                        "mainSeriesProperties.haStyle.drawBorder": true,
-                        "mainSeriesProperties.haStyle.borderColor": "#3fcfb4",
-                        "mainSeriesProperties.haStyle.borderUpColor": "#3fcfb4",
-                        "mainSeriesProperties.haStyle.borderDownColor": "#fe4761",
-                        "mainSeriesProperties.haStyle.wickColor": "#737375",
-                        "mainSeriesProperties.haStyle.wickUpColor": "#3fcfb4",
-                        "mainSeriesProperties.haStyle.wickDownColor": "#fe4761",
-                        "mainSeriesProperties.haStyle.barColorsOnPrevClose": false,
-                        "mainSeriesProperties.barStyle.upColor": "#3fcfb4",
-                        "mainSeriesProperties.barStyle.downColor": "#fe4761",
-                        "mainSeriesProperties.barStyle.barColorsOnPrevClose": false,
-                        "mainSeriesProperties.barStyle.dontDrawOpen": false,
-                        "mainSeriesProperties.lineStyle.color": "#0cbef3",
-                        "mainSeriesProperties.lineStyle.linestyle": 0,
-                        "mainSeriesProperties.lineStyle.linewidth": 1,
-                        "mainSeriesProperties.lineStyle.priceSource": "close",
-                        "mainSeriesProperties.areaStyle.color1": "#0cbef3",
-                        "mainSeriesProperties.areaStyle.color2": "#0098c4",
-                        "mainSeriesProperties.areaStyle.linecolor": "#0cbef3",
-                        "mainSeriesProperties.areaStyle.linestyle": 0,
-                        "mainSeriesProperties.areaStyle.linewidth": 1,
-                        "mainSeriesProperties.areaStyle.priceSource": "close",
-                        "mainSeriesProperties.areaStyle.transparency": 80
-                    }
+      autosize: this.autosize
+      
     };
 
     const tvWidget = new widget(widgetOptions);

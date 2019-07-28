@@ -26,8 +26,14 @@ SECRET_KEY = 'verybadsecret!!!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1','https://viramedia-223917.appspot.com']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','https://virameddia.appspot.com']
 
+if os.getenv('GAE_APPLICATION',None):
+    DEBUG=True
+if os.getenv('SERVER_SOFTWARE','').startswith('Google App Engine'):
+    DEBUG=True
+else:
+    DEBUG=True
 ACCOUNT_ACTIVATION_DAYS = 7
 # Application definition
 
@@ -70,6 +76,7 @@ JWT_AUTH = {
 CORS_ORIGIN_WHITELIST = (
     'localhost:8080',
     'localhost',
+    'https://virameddia.appspot.com'
 )
 
 MIDDLEWARE = [
@@ -90,7 +97,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # Add dist to
-        'DIRS': ['dist'],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,6 +123,19 @@ DATABASES = {
     }
 }
 
+EDDATABASES = {
+'default': {
+'ENGINE': 'django.db.backends.mysql',
+'NAME': 'dataflair',
+'USER': 'root',
+'PASSWORD': "",
+'HOST': "",
+'PORT': "",
+'OPTIONS': {
+'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+}
+}
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -173,3 +193,23 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Insert Whitenoise Middleware at top but below Security Middleware
 # MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware',)
 # http://whitenoise.evans.io/en/stable/django.html#make-sure-staticfiles-is-configured-correctly
+from google.cloud import logging
+# StackDriver setup
+client = logging.Client()
+# Connects the logger to the root logging handler; by default
+# this captures all logs at INFO level and higher
+client.setup_logging()LOGGING = {
+'handlers': {
+'stackdriver': {
+'class': 'google.cloud.logging.handlers.CloudLoggingHandler',
+'client': client
+}
+},
+'loggers': {
+'': {
+'handlers': ['stackdriver'],
+'level': 'INFO'
+}
+},
+}
+

@@ -1,3 +1,4 @@
+
 // const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 module.exports = {
@@ -16,6 +17,12 @@ module.exports = {
           // Forward frontend dev server request for /api to django dev server
           target: 'http://localhost:8000/',
         }
-      }
+      },
+     open: process.platform === 'darwin',
+    host: '0.0.0.0',
+    port:8080, // CHANGE YOUR PORT HERE!
+    https: false,
+    hotOnly: true,
+    disableHostCheck: true
     }
   }

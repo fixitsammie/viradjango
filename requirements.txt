@@ -11,4 +11,6 @@ pytz==2018.7
 whitenoise==4.0
 django-registration==3.0.1
 django-password-reset
-
+python-dateutil
+requests_cache
+requests
