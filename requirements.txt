@@ -14,3 +14,5 @@ django-password-reset
 python-dateutil
 requests_cache
 requests
+google-cloud-logging
+SQLAlchemy

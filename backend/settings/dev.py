@@ -9,9 +9,20 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
-
+#APPEND_SLASH=False
 import os
 import datetime
+
+LOGIN_REDIRECT_URL='/'
+
+from django.core.exceptions import ImproperlyConfigured
+ 
+def get_env_variable(var_name):
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = "Set the %s environment variable" % var_name
+        raise ImproperlyConfigured(error_msg)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,14 +37,14 @@ SECRET_KEY = 'verybadsecret!!!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1','localhost','https://virameddia.appspot.com']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','https://virameddia.appspot.com','virameddia.appspot.com']
 
 if os.getenv('GAE_APPLICATION',None):
-    DEBUG=True
+    DEBUGA=True
 if os.getenv('SERVER_SOFTWARE','').startswith('Google App Engine'):
-    DEBUG=True
+    DEBUGA=True
 else:
-    DEBUG=True
+    DEBUGA=True
 ACCOUNT_ACTIVATION_DAYS = 7
 # Application definition
 
@@ -76,6 +87,8 @@ JWT_AUTH = {
 
 CORS_ORIGIN_WHITELIST = (
     'localhost:8080',
+    'localhost:8000',
+    'localhost:3000',
     'localhost',
     'https://virameddia.appspot.com'
 )
@@ -116,27 +129,37 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': get_env_variable('DATABASE_NAME'),
+        'USER': get_env_variable('DATABASE_USER'),
+        'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'L9DhxkGnPLceglby',
+        'HOST': '35.227.76.74',
+            'PORT': ''
+    }
+}
 
-EDDATABASES = {
-'default': {
-'ENGINE': 'django.db.backends.mysql',
-'NAME': 'dataflair',
-'USER': 'root',
-'PASSWORD': "",
-'HOST': "",
-'PORT': "",
-'OPTIONS': {
-'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-}
-}
-}
+'''
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -161,7 +184,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -195,25 +218,46 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware',)
 # http://whitenoise.evans.io/en/stable/django.html#make-sure-staticfiles-is-configured-correctly
 """
-from google.cloud import logging
-# StackDriver setup
-client = logging.Client()
-# Connects the logger to the root logging handler; by default
-# this captures all logs at INFO level and higher
-client.setup_logging()
-LOGGING = {
-'handlers': {
-'stackdriver': {
-'class': 'google.cloud.logging.handlers.CloudLoggingHandler',
-'client': client
-}
-},
-'loggers': {
-'': {
-'handlers': ['stackdriver'],
-'level': 'INFO'
-}
-},
-}
+import sys
+from google.cloud import logging as google_cloud_logging
 
+log_client = google_cloud_logging.Client()
+
+#client.setup_logging()
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'stackdriver_logging': {
+            'class': 'google.cloud.logging.handlers.CloudLoggingHandler',
+            'client': log_client
+        }
+    },
+    'loggers': {
+    '': {
+            'handlers': ['stackdriver_logging'],
+            'level': 'INFO'
+        },
+        'django': {
+            'handlers': ['console', 'stackdriver_logging'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': [
+                'stackdriver_logging'
+            ],
+            'level': 'ERROR',
+        }
+    },
+}
 """

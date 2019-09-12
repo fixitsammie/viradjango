@@ -1,5 +1,7 @@
 # [START django_app]
 runtime: python37
+
+
 handlers:
 # This configures Google App Engine to serve the files in the app's
 # static directory.
@@ -11,3 +13,7 @@ handlers:
 # files defined.
 - url: /.*
   script: auto
+
+
+beta_settings:
+  cloud_sql_instances: 'virameddia:us-east1:virameddiapostgres1'

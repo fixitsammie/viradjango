@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 from django.views.decorators.cache import never_cache
 from rest_framework import viewsets
 
-from .models import Message, MessageSerializer,Ticker,Pair
+from .models import Message, MessageSerializer,Ticker,Pair,Exchange
 
 import time
 # Serve Vue Application
@@ -24,8 +24,8 @@ from django.http import JsonResponse
 
 from .bittrex_data import data_load
 #from .bittrex_main import data_load
-
-
+from .test_data import inside
+from .out import outside
         
 
 
@@ -96,11 +96,15 @@ def spill_data(request):
 def udf_config(request):
     response= {"supports_search": True,
                 "supports_group_request": False,
-                "supports_marks": True,
-                "supports_timescale_marks": True,
+                "supports_marks": False,
+                "supports_timescale_marks": False,
                 "supports_time": True,
                 "exchanges": [
-                
+                {
+                "value": "BTC-VTC",
+                "name": "Bittrex",
+                "desc": "Bittrex"
+                },
                 {
                 "value": "Bittrex",
                 "name": "Bittrex",
@@ -112,28 +116,21 @@ def udf_config(request):
                 "desc": "Bitfinex"
                 },
                 {
-                "value": "Poloniex",
-                "name": "Poloniex",
-                "desc": "Poloniex"
+                "value": "Binance",
+                "name": "Binance",
+                "desc": "Binance"
                 }
                 ],
                 "symbols_types": [
                
+                
                 {
-                "name": "Stock",
-                "value": "stock"
-                },
-                {
-                "name": "Bitcoin",
+                 "name": "Bitcoin",
                 "value": "bitcoin"
-                },
-                {
-                "name": "Index",
-                "value": "index"
                 }
                 ],
                 "supported_resolutions": [
-                "1", "15", "240", "D",
+                 "D",
                 "2D",
                 "3D",
                 "W",
@@ -151,22 +148,23 @@ def symbol_resolve(request):
     except:
         exchange=''
     the_symbol=symbol_split[0]
+    the_symbol_full=symbol
     
     symbol={
-        'name': the_symbol,
-        'exchange-traded': exchange,
-        'exchange-listed': exchange,
-        'timezone': 'Africa/Lagos',
-        'minmov': 0.1,
+        'name': the_symbol_full,
+        'exchange-traded': the_symbol,
+        'exchange-listed': the_symbol,
+        'timezone': 'America/New_York',
+        'minmov': 1,
         'minmov2': 0,
         'pointvalue': 1,
-        'session': '0930-1630',
-        'has_intraday': False,
+        'session': '24x7',
+        'has_intraday': True,
         'has_no_volume': False,
         'description': the_symbol,
-        'type': 'stock',
+        'type': 'bitcoin',
         'supported_resolutions': [
-        '1', '15', '240',
+       
         'D',
         '2D',
         '3D',
@@ -175,8 +173,8 @@ def symbol_resolve(request):
         'M',
         '6M'
         ],
-        'pricescale': '1',
-        'ticker': the_symbol
+        'pricescale': '100',
+        'ticker': the_symbol_full
         }
     response={'symbol':symbol}
     return JsonResponse(symbol)
@@ -222,12 +220,12 @@ def symbol_info(request):
         'type': ["bitcoin","stock", "stock", "index"],
         'ticker': ["USDT-BTC","AASPL~0", "MSFT~0", "$SPX500"],
         'timezone': "America/New_York",
-        'session-regular': "0900-1600",
+        'session-regular': "24x7",
         }
     response={'symbol':symbol}
     return JsonResponse(symbol)
 
-def symbol_info2(request):
+def symbol_info23(request):
     symbol=request.GET['symbol']
     symbol={
         "name": "USDBTC",
@@ -236,7 +234,7 @@ def symbol_info2(request):
         "timezone": "America/New_York",
         "minmov": 1,
         "minmov2": 0,
-        "pointvalue": 1,
+        "pointvalue": 0.0001,
         "session": "24x7",
         "has_intraday": False,
         "has_no_volume": False,
@@ -252,7 +250,7 @@ def symbol_info2(request):
         "M",
         "6M"
         ],
-        "pricescale": 1,
+        "pricescale": 10000,
         "ticker": "USDT-BTC:Bittrex"}
     response={'symbol':symbol}
     return JsonResponse(response)
@@ -273,20 +271,45 @@ def symbol_search(request):
     response={'symbol':str(query)}
     return JsonResponse(response)
 from datetime import datetime
+from django.utils import timezone
+
+
 def get_bars(request):
     symbol=request.GET['symbol']
+    symbol_split=symbol.split(':')
+    if len(symbol_split)==2:
+        symbol_name=symbol_split[0]
+        exchange_name=symbol_split[1]
+    #TODO handle if only one symbol is sent
     time_from=request.GET['from']
     time_to=request.GET['to']
-    dt_time_from=datetime.fromtimestamp(int(time_from))
-    dt_time_to=datetime.fromtimestamp(int(time_to))
     try:
-        pair=Pair.objects.get(name=str(symbol))
+        dt_time_from=datetime.fromtimestamp(int(time_from))
     except:
-        pair='hi'
+        if(int(time_from))<0:
+            dt_time_from=datetime(2000,1,1)
+        else:
+            dt_time_from=datetime(3000,1,1)
+    try:
+        dt_time_to=datetime.fromtimestamp(int(time_to))
+    except:
+        if(int(time_to))<0:
+            dt_time_to=datetime(2000,1,1)
+        else:
+            dt_time_to=datetime(3000,1,1)
+    dt_time_from= timezone.make_aware(dt_time_from, timezone.get_current_timezone())
+    dt_time_to=timezone.make_aware(dt_time_to, timezone.get_current_timezone())
+    try:
+        pair=Pair.objects.get(name=str(symbol_name))
+    except:
+        pair=None
     print(pair)
     resolution=request.GET['resolution']
     print("{0},{1},{2}".format(time_from,time_to,resolution))
-    b=Ticker.objects.filter(ticker_updated_time__gte=dt_time_from).filter(ticker_updated_time__lte=dt_time_to)
+    if pair:
+        b=Ticker.objects.filter(pair=pair,ticker_updated_time__gte=dt_time_from).filter(ticker_updated_time__lte=dt_time_to)
+    else:
+        b=[]
     t=[]
     c=[]
     o=[]
@@ -302,26 +325,30 @@ def get_bars(request):
         l.append(float(i.ticker_low))
         v.append(float(i.ticker_volume))
 
-    response={
-       's': "ok",
-       't': [1386493512, 1386493572, 1386493632, 1386493692],
-       'c': [42.1, 43.4, 44.3, 42.8],
-       'o': [41.0, 42.9, 43.7, 44.5],
-       'h': [43.0, 44.1, 44.8, 44.5],
-       'l': [40.4, 42.1, 42.8, 42.3],
-       'v': [12000, 18500, 24000, 45000]
-       }
-    response={
-       's': "ok",
-       't': t,
-       'c': c,
-       'o': o,
-       'h': h,
-       'l': l,
-       'v': v
-       }
+    response={}
+    if not b:
+        response['s']='nodata'
+        response['nextTime']: 1426118400
+        #TODO add next time variable
+    else:
+        response={
+           's': "ok",
+           't': t,
+           'c': c,
+           'o': o,
+           'h': h,
+           'l': l,
+           'v': v}
     #response=data_load['result']
     return JsonResponse(response,safe=False)
+'''
+if dt_time_from < smallest time record:
+    next_time=smallest_record
+else if dt_time_from > smallest time record and dt_time_to<largest time
+    next_time=current_time+one day
+else:
+    next_time=largest time
+'''
 
 def get_server_time(request):
     import time
@@ -330,3 +357,134 @@ def get_server_time(request):
     return JsonResponse(response)
 
 
+def get_all_exchanges(request):
+    a=Exchange.objects.all()
+    b=[]
+    for i in a:
+         pairs=Pair.objects.filter(exchange=i)
+         pairs_=[j.name for j in pairs]
+         exch_={'name':i.name,'pairs':pairs_}
+         b.append(exch_)
+    response={'exchanges':[{'name':'Bittrex','pairs':['BTCUSD','FETSDS']},{'name':'Poloniex','pairs':['BTUSD','XETSDS']}]}
+    response={'exchanges':b}
+    return JsonResponse(response)
+
+
+'''
+if dt_time_from < smallest time record:
+    next_time=smallest_record
+else if dt_time_from > smallest time record and dt_time_to<largest time
+    next_time=current_time+one day
+else:
+    next_time=largest time
+'''
+
+from django.http import Http404
+def react_get_bars_r(request):
+    exchange=request.GET['e']
+    fsym=request.GET['fsym']
+    tsym=request.GET['tsym']
+    toTs=request.GET['toTs']
+    limit=request.GET['limit']
+    pair_name="{}-{}".format(fsym,tsym)
+    response={}
+    pair=None
+    try:
+        exch=Exchange.objects.get(name=exchange)
+    except Exchange.DoesNotExist:
+        exch=None
+        response['s']='nodata'
+    if exch:
+        try:
+            pair=Pair.objects.get(name=pair_name,exchange=exch)
+        except Pair.DoesNotExist:
+            pair=None
+            response['s']='nodata'
+            
+    
+    time_to=toTs
+    try:
+        dt_time_to=datetime.fromtimestamp(int(time_to))
+    except:
+        if(int(time_to))<0:
+            dt_time_to=datetime(2000,1,1)
+        else:
+            dt_time_to=datetime(3000,1,1)
+    dt_time_to=timezone.make_aware(dt_time_to, timezone.get_current_timezone())
+    Datum=[]
+    if pair:
+        if Ticker.objects.filter(pair=pair,ticker_updated_time__lte=dt_time_to).exists():
+            b=Ticker.objects.filter(pair=pair,ticker_updated_time__lte=dt_time_to)[:int(limit)]
+            #first is e.g 2012, last is e.g 2019
+            last=Ticker.objects.filter(pair=pair,ticker_updated_time__lte=dt_time_to).first()
+            print(last)
+            print(len(b))
+            first=Ticker.objects.filter(pair=pair,ticker_updated_time__lte=dt_time_to).last()
+            print(first)
+            response["TimeFrom"]=int(time.mktime(first.ticker_updated_time.timetuple()))
+            response["TimeTo"]=int(time.mktime(last.ticker_updated_time.timetuple()))
+            response["Response"]= "Success"
+            response["Type"]= 100
+            response["Aggregated"]= False
+            response["FirstValueInArray"]=True
+            response["ConversionType"]={"type":"force_direct","conversionSymbol":""}
+            response["RateLimit"]={}
+            response["HasWarning"]=False
+            c=reversed(b)
+            for i in c:
+                time_=int(time.mktime(i.ticker_updated_time.timetuple()))
+                open_=float(i.ticker_open)
+                close_=float(i.ticker_close)
+                high_=float(i.ticker_high)
+                low_=float(i.ticker_low)
+                volumeto_=float(i.ticker_volume)
+                volumefrom_=volumeto_*open_
+                '''
+                open_=round(float(i.ticker_open),2)
+                close_=round(float(i.ticker_close),2)
+                high_=round(float(i.ticker_high),2)
+                low_=round(float(i.ticker_low),2)
+                volumeto_=round(float(i.ticker_volume),2)
+                volumefrom_=round(volumeto_*open_,2)
+                '''
+                tmp={"time":time_,"close":close_,"high":high_,"low":low_,"open":open_,"volumeto":volumeto_,"volumefrom":volumefrom_}
+                Datum.append(tmp)
+            else:
+                #implement no data
+                pass
+            response["Data"]=Datum
+        else:
+            response["TimeFrom"]=toTs
+            response["TimeTo"]=toTs
+            response["Response"]= "Success"
+            response["Type"]= 100
+            response["Aggregated"]= False
+            response["FirstValueInArray"]=True
+            response["ConversionType"]={"type":"force_direct","conversionSymbol":""}
+            response["RateLimit"]={}
+            response["HasWarning"]=False
+            response["Data"]="noData"
+
+    else:
+        response["TimeFrom"]=toTs
+        response["TimeTo"]=toTs
+        response["Response"]= "Success"
+        response["Type"]= 100
+        response["Aggregated"]= False
+        response["FirstValueInArray"]=True
+        response["ConversionType"]={"type":"force_direct","conversionSymbol":""}
+        response["RateLimit"]={}
+        response["HasWarning"]=False
+        response["Data"]="noData"
+    
+    return JsonResponse(response)
+
+
+
+def react_get_bars(request):
+   
+    response_data=inside
+    #response_data=outside
+    
+    return JsonResponse(response_data)
+    #return Response(response_data, status=HTTP_200_OK)

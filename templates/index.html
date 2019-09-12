@@ -1,8 +1,7 @@
 
 {% extends "base.html" %}
-{% load static %}
+{% load  static %}
 {% block  content %}
-
 
   <main>
     <div class="position-relative">
@@ -28,9 +27,13 @@
                
                 <h1 class="display-3 text-white">Cryptocurrency Dashboard
                   <span>All the Major Exchanges</span></h1>
+                  {% if user.is_authenticated %}
+					<p class="lead text-white">{{ user.username }}</p>
+					{% endif %}
+
                 <p class="lead text-white">Closing prices, Open prices, volume of major cryptocurrency pairs.</p>
                 <div class="btn-wrapper mt-5">
-                  <a href="accounts/login" class="btn btn-lg btn-white btn-icon mb-3 mb-sm-0">
+                  <a href="{% url 'login' %}" class="btn btn-lg btn-white btn-icon mb-3 mb-sm-0">
                    
                     <span class="btn-inner--text">Start</span>
                   </a>
@@ -70,7 +73,9 @@
 
     </section>
 <section class="section section-lg">
+	 <div class="container">
     {% include "dist/index.html" %}
+</div>
 </section>
   </main>
   <footer class="footer has-cards">

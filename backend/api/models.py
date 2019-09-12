@@ -25,9 +25,9 @@ class Pair(models.Model):
     def  __str__(self):
         return "{0} {1}".format(self.name,self.exchange.name)
     
-
+#,unique_for_date="ticker_updated_time"
 class Ticker(models.Model):
-    pair=models.ForeignKey('Pair', on_delete=models.CASCADE,unique_for_date="ticker_updated_time")
+    pair=models.ForeignKey('Pair', on_delete=models.CASCADE)
     ticker_open=models.DecimalField(max_digits=30,decimal_places=10)
     ticker_close=models.DecimalField(max_digits=30,decimal_places=10)
     ticker_volume=models.DecimalField(max_digits=30,decimal_places=10)
