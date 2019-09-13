@@ -12,7 +12,7 @@ dj-database-url = "*"
 psycopg2-binary = "*"
 django-cors-headers = "*"
 django-rest-framework = "*"
-
+djangorestframework-jwt= "*"
 [dev-packages]
 pylint = "*"
 
