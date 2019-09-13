@@ -119,7 +119,7 @@ def bittrex_download(request):
 	bulk_mgr.done()
 	print(response_dict)
 	return JsonResponse(response_dict)
-
+#TODO rewrite this function to check if the data is already in the database
 #get a link that updates the data every midnight
 #dashboard that shows health of everybody
 #write a function that will sleep for 30 minutes before requesting for the second mkt etc
