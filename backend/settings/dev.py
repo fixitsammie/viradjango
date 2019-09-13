@@ -35,9 +35,10 @@ BASE_DIR = os.path.dirname(SETTINGS_DIR)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'verybadsecret!!!'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1','localhost','https://virameddia.appspot.com','virameddia.appspot.com']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','https://viradash.herokuapp.com','viradash.herokuapp.com']
 
 if os.getenv('GAE_APPLICATION',None):
     DEBUGA=True
@@ -90,7 +91,7 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:8000',
     'localhost:3000',
     'localhost',
-    'https://virameddia.appspot.com'
+    'https://viradash.herokuapp.com'
 )
 
 MIDDLEWARE = [

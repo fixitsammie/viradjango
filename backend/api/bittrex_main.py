@@ -21,7 +21,8 @@ mkt2=['BTC-XEM', 'BTC-CLAM', 'BTC-DMD', 'BTC-GAM', 'BTC-SPHR', 'BTC-OK', 'BTC-SN
 mkt3=['BTC-SIB', 'BTC-ION', 'BTC-LMC', 'BTC-QWARK', 'BTC-CRW', 'BTC-SWT', 'BTC-MLN', 'BTC-ARK', 'BTC-DYN', 'BTC-TKS', 'BTC-MUSIC', 'BTC-DTB', 'BTC-INCNT', 'BTC-GBYTE', 'BTC-GNT', 'BTC-NXC', 'BTC-EDG', 'BTC-LGD', 'BTC-TRST', 'ETH-GNT', 'ETH-REP', 'USDT-ETH', 'ETH-WINGS', 'BTC-WINGS', 'BTC-RLC', 'BTC-GNO', 'BTC-GUP', 'BTC-LUN', 'ETH-GUP', 'ETH-RLC', 'ETH-LUN', 'ETH-GNO', 'BTC-APX', 'BTC-HMQ', 'ETH-HMQ', 'BTC-ANT', 'ETH-TRST', 'ETH-ANT', 'BTC-SC', 'ETH-BAT', 'BTC-BAT', 'BTC-ZEN', 'BTC-1ST', 'BTC-QRL', 'ETH-1ST', 'ETH-QRL', 'BTC-CRB', 'ETH-CRB', 'ETH-LGD', 'BTC-PTOY', 'ETH-PTOY', 'BTC-MYST', 'ETH-MYST', 'BTC-CFI', 'ETH-CFI', 'BTC-BNT', 'ETH-BNT', 'BTC-NMR', 'ETH-NMR', 'ETH-LTC', 'ETH-XRP', 'BTC-SNT', 'ETH-SNT', 'BTC-DCT', 'BTC-XEL', 'BTC-MCO', 'ETH-MCO', 'BTC-ADT']
 mkt4=['ETH-ADT', 'BTC-FUN', 'ETH-FUN', 'BTC-PAY', 'ETH-PAY', 'BTC-MTL', 'ETH-MTL', 'BTC-STORJ', 'ETH-STORJ', 'BTC-ADX', 'ETH-ADX', 'ETH-DASH', 'ETH-SC', 'ETH-ZEC', 'USDT-ZEC', 'USDT-LTC', 'USDT-ETC', 'USDT-XRP', 'BTC-OMG', 'ETH-OMG', 'BTC-CVC', 'ETH-CVC', 'BTC-PART', 'BTC-QTUM', 'ETH-QTUM', 'ETH-XMR', 'ETH-XEM', 'ETH-XLM', 'ETH-NEO', 'USDT-XMR', 'USDT-DASH', 'ETH-BCC', 'USDT-BCC', 'BTC-BCC', 'BTC-DNT', 'ETH-DNT', 'USDT-NEO', 'ETH-WAVES', 'ETH-STRAT', 'ETH-DGB', 'ETH-FCT', 'USDT-OMG', 'BTC-ADA', 'BTC-MANA', 'ETH-MANA', 'BTC-SALT', 'ETH-SALT', 'BTC-TIX', 'ETH-TIX', 'BTC-RCN', 'ETH-RCN', 'BTC-VIB', 'ETH-VIB', 'BTC-MER', 'BTC-POWR', 'ETH-POWR', 'BTC-BTG', 'ETH-BTG', 'USDT-BTG', 'ETH-ADA', 'BTC-ENG', 'ETH-ENG', 'USDT-ADA', 'USDT-XVG', 'USDT-NXT', 'BTC-UKG', 'ETH-UKG']
 
-mkt9=[mkt1,mkt2,mkt3,mkt4]
+#mkt9=[mkt1,mkt2,mkt3,mkt4]
+mkt9=[mkt1]
 def build_address(pair):
     address='https://international.bittrex.com/Api/v2.0/pub/market/GetTicks?_=149912722000&marketName={0}&tickInterval=day'.format(pair)
     return address
@@ -114,7 +115,7 @@ def bittrex_download(request):
 				response_dict[current_pair]='success'
 			else:
 				response_dict[current_pair]='error'
-		time.sleep(600)
+		time.sleep(10)
 	bulk_mgr.done()
 	print(response_dict)
 	return JsonResponse(response_dict)

@@ -7,11 +7,16 @@ from .dev import *
 ############
 # DATABASE #
 ############
+'''
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL')
     )
 }
+'''
+
+
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 ############
