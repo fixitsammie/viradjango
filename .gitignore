@@ -12,7 +12,7 @@
 # below:
 .git
 .gitignore
-
+utils.py
 vue.config.js
 yarn.lock
 package.json
