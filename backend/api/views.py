@@ -414,7 +414,7 @@ def react_get_bars_r(request):
     Datum=[]
     if pair:
         if Ticker.objects.filter(pair=pair,ticker_updated_time__lte=dt_time_to).exists():
-            b=Ticker.objects.filter(pair=pair,ticker_updated_time__lte=dt_time_to)[:int(limit)]
+            b=Ticker.objects.filter(pair=pair,ticker_updated_time__lte=dt_time_to).order_by('ticker_updated_time')[:int(limit)]
             #first is e.g 2012, last is e.g 2019
             response["Response"]= "Success"
             response["Type"]= 100
@@ -423,8 +423,8 @@ def react_get_bars_r(request):
             response["ConversionType"]={"type":"force_direct","conversionSymbol":""}
             response["RateLimit"]={}
             response["HasWarning"]=False
-            c=reversed(b)
-            for i in c:
+            #c=reversed(b)
+            for i in b:
                 time_=int(time.mktime(i.ticker_updated_time.timetuple()))
                 open_=float(i.ticker_open)
                 close_=float(i.ticker_close)
