@@ -66,17 +66,19 @@ default_date=datetime.datetime.combine(datetime.datetime.now(), datetime.time(0,
 
 
 
-exchange_name='Bittrex'
-try:
-	exchange=Exchange.objects.get(name=exchange_name)
-except:
-	Exchange(name=exchange_name).save()
-	exchange=Exchange.objects.get(name=exchange_name)
+
 
 
 
 	
 def bittrex_download(request):
+	exchange_name='Bittrex'
+	try:
+		exchange=Exchange.objects.get(name=exchange_name)
+	except:
+		Exchange(name=exchange_name).save()
+		exchange=Exchange.objects.get(name=exchange_name)\
+		
 	response_dict={}
 	bulk_mgr = BulkCreateManager(chunk_size=1000)
 	for mkt in mkt9:
