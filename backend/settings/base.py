@@ -80,10 +80,7 @@ JWT_AUTH = {
 }
 
 CORS_ORIGIN_WHITELIST = (
-    'localhost:8080',
-    'localhost:8000',
-    'localhost:3000',
-    'localhost',
+    
     'https://viradash.herokuapp.com'
 )
 
