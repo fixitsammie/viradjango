@@ -446,7 +446,7 @@ def react_get_bars_r(request):
                 response["TimeFrom"]=toTs
                 response["TimeTo"]=toTs
                 #implement no data
-            finally:
+            if Datum:
                 response["TimeFrom"]=Datum[-1]["time"]
                 response["TimeTo"]=last=Datum[0]["time"]
                 response["Data"]=Datum
