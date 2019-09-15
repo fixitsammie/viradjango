@@ -416,13 +416,6 @@ def react_get_bars_r(request):
         if Ticker.objects.filter(pair=pair,ticker_updated_time__lte=dt_time_to).exists():
             b=Ticker.objects.filter(pair=pair,ticker_updated_time__lte=dt_time_to)[:int(limit)]
             #first is e.g 2012, last is e.g 2019
-            last=Ticker.objects.filter(pair=pair,ticker_updated_time__lte=dt_time_to).first()
-            print(last)
-            print(len(b))
-            first=Ticker.objects.filter(pair=pair,ticker_updated_time__lte=dt_time_to).last()
-            print(first)
-            response["TimeFrom"]=int(time.mktime(first.ticker_updated_time.timetuple()))
-            response["TimeTo"]=int(time.mktime(last.ticker_updated_time.timetuple()))
             response["Response"]= "Success"
             response["Type"]= 100
             response["Aggregated"]= False
@@ -450,9 +443,13 @@ def react_get_bars_r(request):
                 tmp={"time":time_,"close":close_,"high":high_,"low":low_,"open":open_,"volumeto":volumeto_,"volumefrom":volumefrom_}
                 Datum.append(tmp)
             else:
+                response["TimeFrom"]=toTs
+                response["TimeTo"]=toTs
                 #implement no data
-                pass
-            response["Data"]=Datum
+            finally:
+                response["TimeFrom"]=Datum[-1]["time"]
+                response["TimeTo"]=last=Datum[0]["time"]
+                response["Data"]=Datum
         else:
             response["TimeFrom"]=toTs
             response["TimeTo"]=toTs
