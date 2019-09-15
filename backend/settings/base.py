@@ -79,10 +79,9 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
 }
 
-CORS_ORIGIN_WHITELIST = (
+CORS_ORIGIN_WHITELIST = ['https://viradash.herokuapp.com']
     
-    'https://viradash.herokuapp.com'
-)
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
