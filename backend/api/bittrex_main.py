@@ -23,6 +23,7 @@ mkt4=['ETH-ADT', 'BTC-FUN', 'ETH-FUN', 'BTC-PAY', 'ETH-PAY', 'BTC-MTL', 'ETH-MTL
 
 #mkt9=[mkt1,mkt2,mkt3,mkt4]
 mkt9=[mkt1]
+#mkt9=[['BTC-PAY', 'USD-BTC']]
 def build_address(pair):
     address='https://international.bittrex.com/Api/v2.0/pub/market/GetTicks?_=149912722000&marketName={0}&tickInterval=day'.format(pair)
     return address
@@ -71,13 +72,13 @@ default_date=datetime.datetime.combine(datetime.datetime.now(), datetime.time(0,
 
 
 	
-def bittrex_download(request):
+def bittrex_download2(request):
 	exchange_name='Bittrex'
 	try:
 		exchange=Exchange.objects.get(name=exchange_name)
 	except:
 		Exchange(name=exchange_name).save()
-		exchange=Exchange.objects.get(name=exchange_name)\
+		exchange=Exchange.objects.get(name=exchange_name)
 		
 	response_dict={}
 	bulk_mgr = BulkCreateManager(chunk_size=1000)
@@ -121,6 +122,57 @@ def bittrex_download(request):
 	bulk_mgr.done()
 	print(response_dict)
 	return JsonResponse(response_dict)
+
+def bittrex_download(request):
+	exchange_name='Bittrex'
+	try:
+		exchange=Exchange.objects.get(name=exchange_name)
+	except:
+		Exchange(name=exchange_name).save()
+		exchange=Exchange.objects.get(name=exchange_name)
+		
+	response_dict={}
+	for mkt in mkt9:
+		for current_pair in mkt:
+			first_coin=current_pair
+			if r(first_coin)['success']:
+				try:
+					pair=Pair.objects.get(name=first_coin)
+				except:
+					Pair(name=first_coin,exchange=exchange).save()
+					pair=Pair.objects.get(name=first_coin,exchange=exchange)
+				added=0
+				for candle in r(first_coin)['result']:
+					candle_ticker_updated=parse(candle['T'],default=default_date)
+					candle_ticker_time=candle['T']
+					candle_ticker_open=candle['O']
+					candle_ticker_close=candle['C']
+					candle_ticker_high=candle['H']
+					candle_ticker_low=candle['L']
+					candle_ticker_volume=candle['BV']
+					candle_ticker_ordinary_volume=candle['V']
+					
+					if not Ticker.objects.filter(pair=pair,ticker_time=candle_ticker_time,ticker_updated_time=candle_ticker_updated).exists():
+						ticker=Ticker(pair=pair,
+										ticker_open=candle_ticker_open,
+										ticker_close=candle_ticker_close,
+										ticker_volume=candle_ticker_ordinary_volume,
+										ticker_low=candle_ticker_low,
+										ticker_high=candle_ticker_high,
+										ticker_bulk_volume=candle_ticker_volume,
+										ticker_time=candle_ticker_time,
+										ticker_updated_time=candle_ticker_updated
+										)
+						ticker.save()
+						added=added+1
+					    
+				response_dict[current_pair]='Success : Added {} new {} pairs'.format(added,first_coin)
+				print('Added {} new {} pairs'.format(added,first_coin))	
+			else:
+				response_dict[current_pair]='error'
+		time.sleep(10)
+	
+	return JsonResponse(response_dict)	
 #TODO rewrite this function to check if the data is already in the database
 #get a link that updates the data every midnight
 #dashboard that shows health of everybody

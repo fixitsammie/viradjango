@@ -42,31 +42,6 @@ from rest_framework.status import (
 from rest_framework.response import Response
 
 
-@csrf_exempt
-@api_view(["POST"])
-@permission_classes((AllowAny,))
-def login(request):
-    username = request.data.get("username")
-    password = request.data.get("password")
-    if username is None or password is None:
-        return Response({'error': 'Please provide both username and password'},
-                        status=HTTP_400_BAD_REQUEST)
-    user = authenticate(username=username, password=password)
-    if not user:
-        return Response({'error': 'Invalid Credentials'},
-                        status=HTTP_404_NOT_FOUND)
-    token, _ = Token.objects.get_or_create(user=user)
-    return Response({'token': token.key},
-                    status=HTTP_200_OK)
-
-@csrf_exempt
-@api_view(["GET"])
-def sample_api(request):
-    data = {'sample_data': 123}
-    return Response(data, status=HTTP_200_OK)
-
-#@csrf_exempt
-#@api_view(["GET"])
 def spill_data(request):
     response_data = {
             "success": "true",
@@ -225,35 +200,6 @@ def symbol_info(request):
     response={'symbol':symbol}
     return JsonResponse(symbol)
 
-def symbol_info23(request):
-    symbol=request.GET['symbol']
-    symbol={
-        "name": "USDBTC",
-        "exchange-traded": "Bitrex",
-        "exchange-listed": "Bitrex",
-        "timezone": "America/New_York",
-        "minmov": 1,
-        "minmov2": 0,
-        "pointvalue": 0.0001,
-        "session": "24x7",
-        "has_intraday": False,
-        "has_no_volume": False,
-        "description": "Bittrex",
-        "type": "bitcoin",
-        "supported_resolutions": [
-        "1", "15", "240",
-        "D",
-        "2D",
-        "3D",
-        "W",
-        "3W",
-        "M",
-        "6M"
-        ],
-        "pricescale": 10000,
-        "ticker": "USDT-BTC:Bittrex"}
-    response={'symbol':symbol}
-    return JsonResponse(response)
 def symbol_search(request):
     query=request.GET['query']
     exchange=request.GET['exchange']
@@ -341,14 +287,6 @@ def get_bars(request):
            'v': v}
     #response=data_load['result']
     return JsonResponse(response,safe=False)
-'''
-if dt_time_from < smallest time record:
-    next_time=smallest_record
-else if dt_time_from > smallest time record and dt_time_to<largest time
-    next_time=current_time+one day
-else:
-    next_time=largest time
-'''
 
 def get_server_time(request):
     import time
@@ -370,14 +308,7 @@ def get_all_exchanges(request):
     return JsonResponse(response)
 
 
-'''
-if dt_time_from < smallest time record:
-    next_time=smallest_record
-else if dt_time_from > smallest time record and dt_time_to<largest time
-    next_time=current_time+one day
-else:
-    next_time=largest time
-'''
+
 
 from django.http import Http404
 def react_get_bars_r(request):
@@ -431,7 +362,8 @@ def react_get_bars_r(request):
                 high_=float(i.ticker_high)
                 low_=float(i.ticker_low)
                 volumeto_=float(i.ticker_volume)
-                volumefrom_=volumeto_*open_
+                volumefrom_=float(i.ticker_bulk_volume)
+                #volumefrom_=volumeto_*open_
                 '''
                 open_=round(float(i.ticker_open),2)
                 close_=round(float(i.ticker_close),2)
