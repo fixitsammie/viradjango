@@ -25,10 +25,7 @@ mkt9=[mkt1]
 from dateutil import tz,parser
 default_date=datetime.datetime.combine(datetime.datetime.now(), datetime.time(0,tzinfo=tz.gettz("America/New_York")))
 
-from binance.client import Client
-binance_api_key='CUH2llyqro5IZ5xYXUsNjrrUZZq2VKPbqXJ9qJAj5iTpRVkpTXiTjj57g88tkXXJ'
-binance_api_secret='NPwVZjuZzpk9lXvdpWT1GxHlkxIAQCoh2spIkl7Pl8qPBz7qkPimn5xQDgirwc9z'
-client = Client(binance_api_key, binance_api_secret)
+
 
 def bit_fix(coin):
 	name=coin[0:3]+"-"+coin[3:]
@@ -41,6 +38,10 @@ def bit_fix(coin):
 
 
 def binance_download(request):
+	from binance.client import Client
+	binance_api_key='CUH2llyqro5IZ5xYXUsNjrrUZZq2VKPbqXJ9qJAj5iTpRVkpTXiTjj57g88tkXXJ'
+	binance_api_secret='NPwVZjuZzpk9lXvdpWT1GxHlkxIAQCoh2spIkl7Pl8qPBz7qkPimn5xQDgirwc9z'
+	client = Client(binance_api_key, binance_api_secret)
 	exchange_name='Binance'
 	try:
 		exchange=Exchange.objects.get(name=exchange_name)
