@@ -38,7 +38,7 @@ SECRET_KEY = 'verybadsecret!!!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1','localhost','https://viradash.herokuapp.com','viradash.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','https://viradash.herokuapp.com','viradash.herokuapp.com','170.244.148.178']
 
 if os.getenv('GAE_APPLICATION',None):
     DEBUGA=True
@@ -142,13 +142,14 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': get_env_variable('DATABASE_NAME'),
-        'USER': get_env_variable('DATABASE_USER'),
-        'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
+        'NAME': 'viradb',
+        'USER': 'postgres',
+        'PASSWORD': 'newpassword112',
         'HOST': 'localhost',
-        'PORT': '5432',
+            'PORT': '5432'
     }
 }
+
 '''
 DATABASES = {
     'default': {
