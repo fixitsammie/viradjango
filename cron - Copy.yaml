@@ -1,0 +1,4 @@
+cron:
+- description: "daily retrieve bittrex data"
+  url: /api/data_download/bittrex
+  schedule: every 24 hours

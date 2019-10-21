@@ -1,0 +1,1 @@
+[{'name':'Bittrex','pairs':['BTCUSD','FETSDS']},{'name':'Poloniex','pairs':['BTUSD','XETSDS']}]

@@ -1,0 +1,1 @@
+[{"model": "api.exchange", "pk": 1, "fields": {"name": "Bittrex"}}, {"model": "api.exchange", "pk": 2, "fields": {"name": "Binance"}}, {"model": "api.exchange", "pk": 3, "fields": {"name": "Bitfinex"}}]
