@@ -41,3 +41,5 @@ appcc contains the data link for the chart
 
 * Set `ALLOWED_HOSTS` on [`backend.settings.prod`](/backend/settings/prod.py)
 
+
+python manage.py runserver --settings=backend.settings.prod
