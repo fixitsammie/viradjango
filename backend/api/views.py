@@ -2,19 +2,23 @@ from django.views.generic import TemplateView
 from django.views.decorators.cache import never_cache
 from rest_framework import viewsets
 
-from .models import Message, MessageSerializer,Ticker,Pair,Exchange
+from .models import Ticker,Pair,Exchange
 
 import time
-# Serve Vue Application
-index_view = never_cache(TemplateView.as_view(template_name='index.html'))
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.utils.translation import ugettext as _
+from django.contrib.auth import logout
 
 
-class MessageViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows messages to be viewed or edited.
-    """
-    queryset = Message.objects.all()
-    serializer_class = MessageSerializer
+
+def index_view(request):
+    if request.user.is_authenticated:
+        return render(request,template_name='auth_user_index.html')
+    else:    
+        return render(request,template_name='index.html')
+
 
 
 from django.shortcuts import render
@@ -383,3 +387,9 @@ def react_get_bars_r(request):
 
 
 
+@login_required
+def logout_request(request):
+    logout(request)
+    messages.add_message(request,messages.INFO,_('You are logged out.'))
+    return HttpResponseRedirect('/')
+    

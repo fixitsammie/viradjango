@@ -15,15 +15,16 @@
   <!-- Icons -->
   <link href= "/static/vendor/nucleo/css/nucleo.css"  rel="stylesheet">
   <link href= "/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+ 
+ 
   <!-- Argon CSS -->
   <link type="text/css" href=  "/static/css/argon.css?v=1.0.1" rel="stylesheet">
-  <!-- Docs CSS -->
-  <link type="text/css" href=  "/static/css/docs.min.css" rel="stylesheet">
+
 </head>
 
 <body>
-  <header class="header-global">
-    <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
+ 
+    <nav id="navbar-main" class="navbar navbar-main navbar-expand-md navbar-dark fixed-top bg-primary">
       <div class="container">
         <a class="navbar-brand mr-lg-5" href="/">
           <img src='/static/img/brand/white.png'>
@@ -49,37 +50,28 @@
           </div>
           
           <ul class="navbar-nav align-items-lg-center ml-lg-auto">
-            <li class="nav-item">
-              <a class="nav-link nav-link-icon" href="/accounts/login"  >
-               Login
-                <span class="nav-link-inner--text d-lg-none">Login</span>
-              </a>
-            </li>
+            
              <li class="nav-item">
-              <a class="nav-link nav-link-icon" href="/accounts/register"  >
-               Register
-                <span class="nav-link-inner--text d-lg-none">Register</span>
+              <a class="nav-link nav-link-icon" href="/logout"  >
+               Logout
+                <span class="nav-link-inner--text d-lg-none">Logout</span>
               </a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
-  </header>
+
   {% block content %}
   {% endblock %}
  
 </body>
-<link type="text/css" href="/static/css/docs.min.css" rel="stylesheet">
+
  <!-- Core -->
   <script src="/static/vendor/jquery/jquery.min.js"  ></script>
   <script src="/static/vendor/popper/popper.min.js" ></script>
   <script src="/static/vendor/bootstrap/bootstrap.min.js" ></script>
-  <script src="/static/vendor/headroom/headroom.min.js" ></script>
-  <!-- Optional JS -->
-  <script src="/static/vendor/onscreen/onscreen.min.js" ></script>
-  <script src="/static/vendor/nouislider/js/nouislider.min.js" ></script>
-  <script src="/static/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js" ></script>
-  <!-- Argon JS -->
-  <script src= "/static/js/argon.js?v=1.0.1" ></script>
+ 
+
+ 
 </html>

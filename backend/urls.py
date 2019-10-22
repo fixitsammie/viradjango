@@ -4,24 +4,24 @@ from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token
 from django.conf import settings
 from django.conf.urls.static import static
-from .api.views import index_view, MessageViewSet,udf_config,symbol_resolve,get_bars,symbol_search,get_server_time,symbol_info,get_all_exchanges,react_get_bars_r
+from .api.views import index_view,udf_config,symbol_resolve,get_bars,symbol_search,get_server_time,symbol_info,get_all_exchanges,react_get_bars_r,logout_request
 from .api.bittrex_main import bittrex_download
 from .api.binance_main import binance_download
 from .api.bitfinex_main import bitfinex_download
 import django_registration
 router = routers.DefaultRouter()
-router.register('messages', MessageViewSet)
+
 # path('accounts/', include('password_reset.urls')),
 urlpatterns = [
 
     # http://localhost:8000/
     path('', index_view, name='index'),
-
+   
     # http://localhost:8000/api/<router-viewsets>
     path('api/', include(router.urls)),
 
     path('accounts/', include('django_registration.backends.one_step.urls')),
-
+path('logout',logout_request,name='logout_request'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('data/histoday',react_get_bars_r,name='react_get_bars_r'),
     #spill_data
