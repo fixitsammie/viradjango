@@ -10,6 +10,7 @@ from .api.binance_main import binance_download
 from .api.bitfinex_main import bitfinex_download
 import django_registration
 router = routers.DefaultRouter()
+from django_registration.backends.one_step.views import RegistrationView
 
 # path('accounts/', include('password_reset.urls')),
 urlpatterns = [
@@ -19,7 +20,9 @@ urlpatterns = [
    
     # http://localhost:8000/api/<router-viewsets>
     path('api/', include(router.urls)),
-
+path('accounts/register/',
+        RegistrationView.as_view(success_url='/'),
+        name='django_registration_register'),
     path('accounts/', include('django_registration.backends.one_step.urls')),
 path('logout',logout_request,name='logout_request'),
     path('accounts/', include('django.contrib.auth.urls')),
